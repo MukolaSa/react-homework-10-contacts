@@ -1,14 +1,19 @@
 import React from 'react';
 
-export function ContactList({ contacts }) {
+export function ContactList({ contacts, deleteContact }) {
   return (
-    <ul>
+    <ul className="contact-list">
       {contacts.map(contact => (
-        <li key={contact.id}>{contact.name}</li>
+        <li key={contact.id} className="contact-item">
+          <div>{contact.name}</div>
+          <div>{contact.number}</div>
+          <button onClick={() => deleteContact(contact.id)} className="delete-btn">Delete</button>
+        </li>
       ))}
     </ul>
   );
 }
+
 
 // state = {
 //     contacts: [
