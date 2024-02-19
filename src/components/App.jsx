@@ -8,6 +8,10 @@ export function App() {
   const [filter, setFilter] = useState('');
 
   const addContact = (name, number) => {
+    if (contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())) {
+      alert(`Contact with name "${name}" already exists!`);
+      return;
+    }
     setContacts(prevContacts => [...prevContacts, { id: nanoid(), name, number }]);
   };
 
