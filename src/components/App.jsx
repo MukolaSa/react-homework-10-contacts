@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import {ContactForm} from './ContactForm';
-import {ContactList} from './ContactList';
+import React, { useState, createContext } from 'react';
+import { ContactForm } from './ContactForm';
+import { ContactList } from './ContactList';
 import { nanoid } from 'nanoid';
+
+export const ContactsContext = createContext();
 
 export function App() {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
 
   const addContact = (name, number) => {
-    if (contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase())) {
-      alert(`Contact with name "${name}" already exists!`);
-      return;
-    }
     setContacts(prevContacts => [...prevContacts, { id: nanoid(), name, number }]);
   };
 
@@ -27,19 +25,27 @@ export function App() {
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
+  const contactsContextValue = {
+    contacts,
+    addContact,
+    deleteContact
+  };
+
   return (
-    <div className="app-container">
-      <h1>Phonebook</h1>
-      <ContactForm addContact={addContact} />
-      <h2>Contacts</h2>
-      <input
-        type="text"
-        value={filter}
-        onChange={handleFilterChange}
-        placeholder="Search contacts..."
-        className="filter-input"
-      />
-      <ContactList contacts={filteredContacts} deleteContact={deleteContact} />
-    </div>
+    <ContactsContext.Provider value={contactsContextValue}>
+      <div className="app-container">
+        <h1>Phonebook</h1>
+        <ContactForm />
+        <h2>Contacts</h2>
+        <input
+          type="text"
+          value={filter}
+          onChange={handleFilterChange}
+          placeholder="Search contacts..."
+          className="filter-input"
+        />
+        <ContactList />
+      </div>
+    </ContactsContext.Provider>
   );
 }

@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useRef } from 'react';
+import { ContactsContext } from './App';
 
-export function ContactForm({ addContact }) {
+export function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contactsRef = useContext(ContactsContext);
+  const nameInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addContact(name, number);
+    contactsRef.addContact(name, number);
     setName('');
     setNumber('');
+    nameInputRef.current.focus();
   };
 
   const handleNameChange = (e) => {
@@ -27,6 +31,7 @@ export function ContactForm({ addContact }) {
           name="name"
           value={name}
           onChange={handleNameChange}
+          ref={nameInputRef}
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces."
           required
