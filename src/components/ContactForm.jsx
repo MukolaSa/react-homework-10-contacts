@@ -1,15 +1,17 @@
-import React, { useState, useContext, useRef } from 'react';
-import { ContactsContext } from './App';
+import React, { useState, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { addContact } from '../Redux/store';
+import { nanoid } from 'nanoid';
 
 export function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const contactsRef = useContext(ContactsContext);
+  const dispatch = useDispatch();
   const nameInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    contactsRef.addContact(name, number);
+    dispatch(addContact({ id: nanoid(), name, number }));
     setName('');
     setNumber('');
     nameInputRef.current.focus();
